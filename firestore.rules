@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+    function isAdmin() {
+      return signedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Users can read their own profile and create it once as a normal user.
+    // They cannot change their role.
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create: if isOwner(uid) && request.resource.data.role == 'user';
+      allow update: if isOwner(uid) && request.resource.data.role == resource.data.role;
+    }
+
+    // Per-user progress and test results.
+    match /progress/{uid} {
+      allow read, write: if isOwner(uid);
+    }
+    match /testResults/{id} {
+      allow read: if signedIn() && resource.data.uid == request.auth.uid;
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
+    }
+
+    // Public content, admin-managed.
+    match /{col}/{id} {
+      allow read: if col in ['posts', 'tests', 'questions', 'courses', 'notifications'];
+      allow write: if isAdmin() && col in ['posts', 'tests', 'questions', 'courses', 'notifications'];
+    }
+
+    // Push tokens: a signed-in user can register a device token for themselves.
+    match /pushTokens/{token} {
+      allow create, update: if signedIn() && request.resource.data.uid == request.auth.uid;
+      allow read, delete: if isAdmin();
+    }
+
+    // Payments and enrollments are written only by the server (Admin SDK).
+    match /payments/{id} { allow read, write: if false; }
+    match /enrollments/{id} { allow read: if signedIn() && resource.data.uid == request.auth.uid; allow write: if false; }
+  }
+}
