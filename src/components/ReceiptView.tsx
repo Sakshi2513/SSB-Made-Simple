@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { doc, getDoc } from "firebase/firestore";
-import { Printer } from "lucide-react";
+import { BadgeCheck, Printer, RotateCcw } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/context/AuthContext";
 import { siteConfig } from "@/config/site";
@@ -45,8 +45,8 @@ export default function ReceiptView() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const order = useSearchParams().get("order") ?? "";
-  const demo = order === "demo" && process.env.NODE_ENV !== "production"; // sample receipt for design preview, development only
-  const [pay, setPay] = useState<Pay | null | undefined>(demo ? DEMO : undefined);
+  const demo = order.startsWith("demo") && process.env.NODE_ENV !== "production"; // sample receipt for design preview, development only
+  const [pay, setPay] = useState<Pay | null | undefined>(demo ? { ...DEMO, status: order === "demo-refunded" ? "refunded" : "paid" } : undefined);
 
   useEffect(() => {
     if (!demo && !loading && !user) router.replace("/login");
@@ -74,6 +74,12 @@ export default function ReceiptView() {
   const refunded = pay.status === "refunded";
   const receiptNo = `SMS-${pay.orderId.replace(/^order_/, "").slice(-8).toUpperCase()}`;
   const when = pay.paidAt || pay.at;
+  const money = `₹${pay.amount.toLocaleString("en-IN")}.00`;
+
+  // Green for paid, blue for refunded
+  const tone = refunded
+    ? { solid: "#1c4cb0", soft: "#eaf0fb", border: "#bcd0f3", text: "#1c4cb0", word: "REFUNDED", line: "Payment refunded" }
+    : { solid: "#2f8f3a", soft: "#e8f6e6", border: "#b7e0b2", text: "#1f6e2a", word: "PAID", line: "Payment received" };
 
   return (
     <div className="mx-auto max-w-[820px]">
@@ -81,110 +87,113 @@ export default function ReceiptView() {
 
       {/* A4 sheet */}
       <article className="receipt-sheet relative overflow-hidden rounded-2xl border border-[#dfe6f2] bg-white shadow-[0_24px_60px_-34px_rgba(12,37,86,0.6)] print:rounded-none print:border-0 print:shadow-none">
-        {/* header band */}
-        <header className="flex items-center justify-between gap-4 bg-gradient-to-r from-[#0a1a3d] via-[#0c2556] to-[#12306b] px-8 py-5 text-white">
+        <div className="h-2" style={{ background: tone.solid }} />
+
+        {/* white header */}
+        <header className="flex items-center justify-between gap-4 bg-white px-8 pb-4 pt-5">
           <div className="flex items-center gap-3">
-            <Image src="/brand/emblem.webp" alt="" width={48} height={48} className="h-12 w-12 object-contain" />
+            <Image src="/brand/emblem.webp" alt="" width={52} height={52} className="h-[52px] w-[52px] object-contain" />
             <div className="leading-none">
-              <p className="text-2xl font-black tracking-tight">SSB</p>
-              <p className="mt-1 text-[0.6rem] font-bold uppercase tracking-[0.3em] text-gold">Made Simple</p>
+              <p className="text-[1.7rem] font-black tracking-tight text-[#0c2556]">SSB</p>
+              <p className="mt-1 text-[0.6rem] font-bold uppercase tracking-[0.3em] text-[#1c4cb0]">Made Simple</p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">Payment receipt</p>
-            <p className="mt-1 font-mono text-sm font-bold">{receiptNo}</p>
+            <p className="text-[1.65rem] font-black uppercase leading-none tracking-wide text-[#0c2556]">Receipt</p>
+            <p className="mt-1.5 font-mono text-xs font-bold text-[#6b7589]">No. {receiptNo}</p>
           </div>
         </header>
-        <div className="h-1.5 bg-gradient-to-r from-[#4a7a2e] via-[#1c4cb0] to-[#3b9cff]" />
+        <div className="mx-8 h-px bg-[#e3e8f1]" />
 
-        <div className="relative px-8 pb-5 pt-5">
+        <div className="px-8 pb-6 pt-5">
+          {/* status banner */}
+          <div className="flex items-center justify-between gap-4 rounded-2xl border px-5 py-4" style={{ background: tone.soft, borderColor: tone.border }}>
+            <div className="flex items-center gap-3">
+              <span className="grid h-11 w-11 place-items-center rounded-full text-white" style={{ background: tone.solid }}>
+                {refunded ? <RotateCcw size={22} /> : <BadgeCheck size={25} />}
+              </span>
+              <div>
+                <p className="text-lg font-black leading-tight" style={{ color: tone.text }}>{tone.line}</p>
+                <p className="text-xs font-semibold text-[#4d5b76]">{fmtDate(when)}{fmtTime(when) ? ` at ${fmtTime(when)}` : ""}</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-black leading-none" style={{ color: tone.text }}>{money}</p>
+              <span className="mt-1.5 inline-block rounded-full px-3 py-0.5 text-[0.7rem] font-black tracking-[0.2em] text-white" style={{ background: tone.solid }}>{tone.word}</span>
+            </div>
+          </div>
+
           {/* parties */}
-          <div className="grid gap-6 sm:grid-cols-2">
+          <div className="mt-5 grid gap-5 sm:grid-cols-2">
             <section>
               <h2 className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[#6b7589]">Billed to</h2>
-              <p className="mt-1.5 text-lg font-black text-[#0c2556]">{pay.name || "Student"}</p>
+              <p className="mt-1 text-base font-black text-[#0c2556]">{pay.name || "Student"}</p>
               <p className="text-sm text-[#4d5b76]">{pay.email || user?.email}</p>
             </section>
             <section className="sm:text-right">
               <h2 className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[#6b7589]">Issued by</h2>
-              <p className="mt-1.5 text-lg font-black text-[#0c2556]">{siteConfig.name}</p>
+              <p className="mt-1 text-base font-black text-[#0c2556]">{siteConfig.name}</p>
               <p className="text-sm text-[#4d5b76]">{siteConfig.contact.email}</p>
               <p className="text-sm text-[#4d5b76]">{siteConfig.contact.phone}</p>
             </section>
           </div>
 
-          {/* meta strip */}
-          <dl className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-[#dfe6f2] bg-[#dfe6f2] sm:grid-cols-4">
-            {[
-              ["Date", fmtDate(when)],
-              ["Time", fmtTime(when) || "-"],
-              ["Status", refunded ? "Refunded" : pay.status === "paid" ? "Paid" : pay.status],
-              ["Currency", "INR (₹)"],
-            ].map(([k, v]) => (
-              <div key={k} className="bg-[#f6f8fc] px-4 py-3">
-                <dt className="text-[0.6rem] font-bold uppercase tracking-[0.18em] text-[#6b7589]">{k}</dt>
-                <dd className="mt-0.5 text-sm font-extrabold text-[#0c2556]">{v}</dd>
-              </div>
-            ))}
-          </dl>
-
           {/* line items */}
-          <table className="mt-5 w-full text-left text-sm">
+          <table className="mt-5 w-full overflow-hidden rounded-xl text-left text-sm">
             <thead>
-              <tr className="border-b-2 border-[#0c2556] text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#0c2556]">
-                <th className="py-2 pr-3">Description</th>
-                <th className="py-2 pr-3">Access</th>
-                <th className="py-2 pr-3 text-center">Qty</th>
-                <th className="py-2 text-right">Amount</th>
+              <tr className="bg-[#f1f4f9] text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#4d5b76]">
+                <th className="px-4 py-2.5">Description</th>
+                <th className="px-4 py-2.5">Access</th>
+                <th className="px-4 py-2.5 text-center">Qty</th>
+                <th className="px-4 py-2.5 text-right">Amount</th>
               </tr>
             </thead>
             <tbody>
               <tr className="border-b border-[#eef1f6]">
-                <td className="py-3 pr-3">
+                <td className="px-4 py-3.5">
                   <p className="font-extrabold text-[#0c2556]">{pay.productName}</p>
                   <p className="text-xs text-[#6b7589]">Digital study content</p>
                 </td>
-                <td className="py-3 pr-3 text-[#4d5b76]">{access}</td>
-                <td className="py-3 pr-3 text-center text-[#4d5b76]">1</td>
-                <td className="py-3 text-right font-bold text-[#0c2556]">₹{pay.amount.toLocaleString("en-IN")}.00</td>
+                <td className="px-4 py-3.5 text-[#4d5b76]">{access}</td>
+                <td className="px-4 py-3.5 text-center text-[#4d5b76]">1</td>
+                <td className="px-4 py-3.5 text-right font-bold text-[#0c2556]">{money}</td>
               </tr>
             </tbody>
           </table>
 
           {/* totals */}
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
-            <div className={`rotate-[-8deg] select-none rounded-lg border-4 px-5 py-1 text-3xl font-black tracking-widest opacity-30 ${refunded ? "border-[#1c4cb0] text-[#1c4cb0]" : "border-[#3d6b24] text-[#3d6b24]"}`} aria-hidden="true">
-              {refunded ? "REFUNDED" : "PAID"}
-            </div>
+          <div className="mt-3 flex flex-wrap items-start justify-between gap-4">
+            <p className="max-w-[16rem] pt-2 text-xs italic text-[#6b7589]">{rupeesInWords(Math.round(pay.amount))}</p>
             <div className="w-full max-w-xs">
-              <div className="flex justify-between py-1.5 text-sm text-[#4d5b76]"><span>Subtotal</span><span>₹{pay.amount.toLocaleString("en-IN")}.00</span></div>
-              <div className="flex items-center justify-between rounded-xl bg-[#0c2556] px-4 py-3 text-white">
-                <span className="text-xs font-bold uppercase tracking-[0.18em] text-gold">{refunded ? "Amount refunded" : "Total paid"}</span>
-                <span className="text-xl font-black">₹{pay.amount.toLocaleString("en-IN")}.00</span>
+              <div className="flex justify-between px-1 py-1.5 text-sm text-[#4d5b76]"><span>Subtotal</span><span>{money}</span></div>
+              <div className="flex items-center justify-between rounded-xl px-4 py-3 text-white" style={{ background: tone.solid }}>
+                <span className="text-xs font-bold uppercase tracking-[0.18em]">{refunded ? "Amount refunded" : "Total paid"}</span>
+                <span className="text-xl font-black">{money}</span>
               </div>
             </div>
           </div>
-          <p className="mt-3 text-xs italic text-[#6b7589]">{rupeesInWords(Math.round(pay.amount))}</p>
 
           {/* payment reference */}
-          <section className="mt-4 rounded-xl border border-dashed border-[#c9d3e6] p-4">
-            <h2 className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[#6b7589]">Payment reference</h2>
+          <section className="mt-5 rounded-xl border border-[#e3e8f1] bg-[#f8fafc] p-4">
+            <h2 className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[#6b7589]">Payment details</h2>
             <dl className="mt-2 grid gap-x-6 gap-y-1.5 text-xs sm:grid-cols-2">
               <div><dt className="inline font-bold text-[#4d5b76]">Paid through: </dt><dd className="inline text-[#0c2556]">Razorpay (UPI / card / netbanking)</dd></div>
-              <div><dt className="inline font-bold text-[#4d5b76]">Order ID: </dt><dd className="inline break-all font-mono text-[#0c2556]">{pay.orderId}</dd></div>
+              <div><dt className="inline font-bold text-[#4d5b76]">Currency: </dt><dd className="inline text-[#0c2556]">INR (₹)</dd></div>
+              <div className="sm:col-span-2"><dt className="inline font-bold text-[#4d5b76]">Order ID: </dt><dd className="inline break-all font-mono text-[#0c2556]">{pay.orderId}</dd></div>
               <div className="sm:col-span-2"><dt className="inline font-bold text-[#4d5b76]">Payment ID: </dt><dd className="inline break-all font-mono text-[#0c2556]">{pay.paymentId || "-"}</dd></div>
             </dl>
           </section>
 
           {/* footer */}
-          <footer className="mt-5 border-t border-[#eef1f6] pt-4">
-            <p className="text-center text-sm font-extrabold text-[#0c2556]">Thank you for choosing {siteConfig.name}. Best wishes for your SSB.</p>
-            <p className="mt-2 text-center text-[0.7rem] leading-relaxed text-[#6b7589]">
-              This is a computer-generated payment receipt and needs no signature. It is not a GST tax invoice. For help with this payment, write to {siteConfig.contact.email} or message us on WhatsApp at {siteConfig.contact.phone}, quoting the receipt number {receiptNo}.
+          <footer className="mt-6 border-t border-[#eef1f6] pt-4 text-center">
+            <p className="text-sm font-extrabold text-[#0c2556]">Thank you for choosing {siteConfig.name}. Best wishes for your SSB.</p>
+            <p className="mt-2 text-[0.7rem] leading-relaxed text-[#6b7589]">
+              This is a computer-generated payment receipt and needs no signature. It is not a GST tax invoice. For help with this payment, write to {siteConfig.contact.email} or message us on WhatsApp at {siteConfig.contact.phone}, quoting receipt {receiptNo}.
             </p>
-            <p className="mt-2 text-center text-[0.7rem] font-bold text-[#1c4cb0]">{siteConfig.url.replace(/^https?:\/\//, "")}</p>
+            <p className="mt-1.5 text-[0.7rem] font-bold text-[#1c4cb0]">{siteConfig.url.replace(/^https?:\/\//, "")}</p>
           </footer>
         </div>
+        <div className="h-1.5 bg-gradient-to-r from-[#4a7a2e] via-[#1c4cb0] to-[#3b9cff]" />
       </article>
 
       <div className="mt-5 flex flex-wrap gap-3 print:hidden">
