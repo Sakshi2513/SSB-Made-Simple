@@ -4,6 +4,13 @@ service cloud.firestore {
 
     function signedIn() { return request.auth != null; }
     function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+    // A student has access to a product when a non-expired enrollment exists (written only by the payment server).
+    function hasAccess(pid) {
+      return signedIn()
+        && exists(/databases/$(database)/documents/enrollments/$(request.auth.uid + '_' + pid))
+        && (get(/databases/$(database)/documents/enrollments/$(request.auth.uid + '_' + pid)).data.expiresAt == null
+            || get(/databases/$(database)/documents/enrollments/$(request.auth.uid + '_' + pid)).data.expiresAt > request.time);
+    }
     function isAdmin() {
       return signedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
@@ -13,7 +20,8 @@ service cloud.firestore {
     match /users/{uid} {
       allow read: if isOwner(uid) || isAdmin();
       allow create: if isOwner(uid) && request.resource.data.role == 'user';
-      allow update: if isOwner(uid) && request.resource.data.role == resource.data.role;
+      allow update: if (isOwner(uid) && request.resource.data.role == resource.data.role) || isAdmin();
+      allow delete: if isAdmin();
     }
 
     // Per-user progress and test results.
@@ -21,14 +29,14 @@ service cloud.firestore {
       allow read, write: if isOwner(uid);
     }
     match /testResults/{id} {
-      allow read: if signedIn() && resource.data.uid == request.auth.uid;
+      allow read: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
       allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
     }
 
     // Public content, admin-managed.
     match /{col}/{id} {
-      allow read: if col in ['posts', 'tests', 'questions', 'courses', 'notifications'];
-      allow write: if isAdmin() && col in ['posts', 'tests', 'questions', 'courses', 'notifications'];
+      allow read: if col in ['posts', 'materials', 'settings', 'tests', 'questions', 'courses', 'notifications', 'downloads', 'products'];
+      allow write: if isAdmin() && col in ['posts', 'materials', 'settings', 'tests', 'questions', 'courses', 'notifications', 'downloads', 'products'];
     }
 
     // Push tokens: a signed-in user can register a device token for themselves.
@@ -37,8 +45,26 @@ service cloud.firestore {
       allow read, delete: if isAdmin();
     }
 
-    // Payments and enrollments are written only by the server (Admin SDK).
-    match /payments/{id} { allow read, write: if false; }
-    match /enrollments/{id} { allow read: if signedIn() && resource.data.uid == request.auth.uid; allow write: if false; }
+    // "Report an error" from the public site: anyone can submit a short report; only admins read or manage them.
+    match /reports/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['page', 'title', 'message', 'email', 'status', 'createdAt'])
+        && request.resource.data.message is string && request.resource.data.message.size() > 0 && request.resource.data.message.size() <= 1000
+        && request.resource.data.page is string && request.resource.data.page.size() <= 300
+        && request.resource.data.status == 'open';
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Paid content: readable only by students enrolled in the product (or admins).
+    match /premium/{id} {
+      allow read: if isAdmin() || hasAccess(resource.data.productId);
+      allow write: if isAdmin();
+    }
+
+    // Payments and enrollments are written only by the payment server (Admin SDK).
+    match /payments/{id} { allow read: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin()); allow write: if false; }
+    match /enrollments/{id} {
+      allow read: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
+      allow write: if false;
+    }
   }
 }

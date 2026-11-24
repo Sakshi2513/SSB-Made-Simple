@@ -17,7 +17,7 @@ export default function Header() {
   const ctaLabel = user ? "Dashboard" : "Sign in";
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 text-navy shadow-[0_8px_28px_-14px_rgba(12,37,86,0.45)] backdrop-blur-xl">
+    <header className="print:hidden sticky top-0 z-40 bg-white/95 text-navy shadow-[0_8px_28px_-14px_rgba(12,37,86,0.45)] backdrop-blur-xl">
       <div className="container-x flex h-[66px] items-center justify-between gap-6">
         <div className="shrink-0">
           <Logo />

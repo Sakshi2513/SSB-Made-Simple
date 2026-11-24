@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen, Brain, Download, FileText, Flag, Image as ImageIcon, Lock, MessagesSquare, Sparkles } from "lucide-react";
 import Reveal from "@/components/Reveal";
-import { freeMaterial } from "@/content/home";
+import { getDownloads } from "@/lib/content";
 
 // Colour per free PDF, in the same order as freeMaterial
 const tones = [
@@ -22,7 +22,8 @@ const premium = [
   { Icon: MessagesSquare, n: "Interview", t: "Framework", c: "#ff8f1f" },
 ];
 
-export default function Material() {
+export default async function Material() {
+  const freeMaterial = (await getDownloads()).slice(0, 8);
   return (
     <section id="material" className="relative overflow-hidden bg-white">
       <div

@@ -9,6 +9,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MobileNav from "@/components/MobileNav";
 import FloatingContacts from "@/components/FloatingContacts";
+import AnnouncementBar from "@/components/AnnouncementBar";
 import { AuthProvider } from "@/context/AuthContext";
 
 
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           >
             Skip to content
           </a>
+          <AnnouncementBar />
           <Header />
           <main id="main" className="flex-1">
             {children}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BookOpen, Brain, Plus, Users } from "lucide-react";
 import { weeks } from "@/content/home";
 
@@ -13,11 +13,20 @@ const phases = [
 
 export default function PlanExplorer() {
   const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
   const p = phases[active];
+  const SLIDE = 5000;
+
+  // auto-advance through the four phases; restarts whenever the phase changes
+  useEffect(() => {
+    if (paused) return;
+    const id = setTimeout(() => setActive((a) => (a + 1) % phases.length), SLIDE);
+    return () => clearTimeout(id);
+  }, [active, paused]);
   const days = Array.from({ length: 30 }, (_, i) => i + 1);
 
   return (
-    <div className="grid h-full overflow-hidden rounded-3xl border border-[#3a4153] bg-gradient-to-br from-[#171b24] via-[#2b3140] to-[#171b24] shadow-[0_30px_60px_-30px_rgba(12,37,86,0.8)] lg:grid-cols-[12.5rem_1fr]">
+    <div onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} className="grid h-full overflow-hidden rounded-3xl border border-[#3a4153] bg-gradient-to-br from-[#171b24] via-[#2b3140] to-[#171b24] shadow-[0_30px_60px_-30px_rgba(12,37,86,0.8)] lg:grid-cols-[12.5rem_1fr]">
       {/* tabs */}
       <div role="tablist" aria-label="Plan phases" className="flex gap-2 overflow-x-auto border-b border-white/10 p-3 lg:flex-col lg:overflow-visible lg:border-b-0 lg:border-r lg:p-4">
         {phases.map(({ Icon, days: d, title }, i) => {
@@ -30,7 +39,7 @@ export default function PlanExplorer() {
               aria-selected={on}
               aria-controls="phase-panel"
               onClick={() => setActive(i)}
-              className={`group flex shrink-0 items-center gap-3 rounded-2xl border px-2.5 py-2.5 text-left transition duration-200 lg:flex-1 lg:shrink ${
+              className={`group relative flex shrink-0 items-center gap-3 rounded-2xl border px-2.5 py-2.5 text-left transition duration-200 lg:flex-1 lg:shrink ${
                 on
                   ? "border-gold/60 bg-gradient-to-r from-gold/20 to-gold/5 shadow-[0_10px_30px_-14px_rgba(255,210,31,0.7)]"
                   : "border-transparent hover:border-white/15 hover:bg-white/5"
@@ -43,6 +52,11 @@ export default function PlanExplorer() {
               >
                 <Icon size={18} strokeWidth={Icon === Plus ? 3 : 2.2} />
               </span>
+              {on && !paused && (
+                <span className="absolute inset-x-3 bottom-1 h-0.5 overflow-hidden rounded bg-white/10" aria-hidden="true">
+                  <span key={active} className="phase-progress block h-full bg-gold" style={{ animationDuration: `${SLIDE}ms` }} />
+                </span>
+              )}
               <span className="min-w-0">
                 <span className={`block text-[0.7rem] font-bold uppercase tracking-[0.18em] ${on ? "text-gold" : "text-white/50"}`}>{d}</span>
                 <span className={`block text-[0.88rem] font-extrabold capitalize leading-tight ${on ? "text-white" : "text-white/75"}`}>{title}</span>
@@ -82,11 +96,12 @@ export default function PlanExplorer() {
               {days.map((d) => {
                 const idx = phases.findIndex((x) => d >= x.from && d <= x.to);
                 const cls = idx === active ? "bg-gold shadow-[0_0_12px_rgba(255,210,31,0.7)]" : idx < active ? "bg-[#3b9cff]/70" : "bg-white/15";
-                return <span key={d} className={`h-5 flex-1 rounded-[3px] transition-colors duration-300 ${cls}`} />;
+                return <span key={d} className={`h-5 flex-1 rounded-[3px] transition-colors duration-500 ${cls}`} style={{ transitionDelay: `${(d % 7) * 40}ms` }} />;
               })}
             </div>
             <div className="mt-2 flex justify-between text-xs font-bold uppercase tracking-wider text-white/50">
               <span>Day 1</span>
+              <span className="text-gold">Now: Day {p.from}–{p.to}</span>
               <span>Day 30 · Centre Day</span>
             </div>
           </div>

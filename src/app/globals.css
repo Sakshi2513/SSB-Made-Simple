@@ -384,7 +384,7 @@ h1, h2, h3, h4 {
 .hero-body { font-size: 1.02rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9); }
 .hero-close { font-size: 1.12rem; line-height: 1.35; font-weight: 900; color: var(--gold); }
 .hero-stat-num { font-size: 1.85rem; }
-.hero-stat-label { font-size: 0.66rem; }
+.hero-stat-label { font-size: 0.72rem; }
 .hero-btn { font-size: 0.9rem; }
 
 @media (min-width: 768px) and (min-height: 800px) {
@@ -421,7 +421,32 @@ button, input, textarea, select {
 
 /* Hero message: justified text */
 .hero-lead, .hero-body {
-  text-align: justify;
-  text-justify: inter-word;
-  hyphens: auto;
+  text-align: left;
+}
+@media (min-width: 768px) {
+  .hero-lead, .hero-body {
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+  }
+}
+
+.phase-progress { transform-origin: left; animation-name: phase-fill; animation-timing-function: linear; animation-fill-mode: forwards; }
+@keyframes phase-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes feat-pop { 0%,100% { transform: scale(1); } 50% { transform: scale(1.12) rotate(-4deg); } }
+@media (prefers-reduced-motion: reduce) { .phase-progress { animation: none; transform: scaleX(1); } }
+
+/* Contact icons: soft pulse ring + wiggle on hover */
+@keyframes ring-pulse { 0% { box-shadow: 0 0 0 0 var(--glow); } 70% { box-shadow: 0 0 0 14px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+@keyframes icon-wiggle { 0%,100% { transform: rotate(0); } 20% { transform: rotate(-14deg); } 40% { transform: rotate(12deg); } 60% { transform: rotate(-8deg); } 80% { transform: rotate(6deg); } }
+.social-pulse { animation: ring-pulse 2.4s ease-out infinite; }
+.social-wiggle:hover svg, .group:hover .social-wiggle svg { animation: icon-wiggle 0.6s ease; }
+@media (prefers-reduced-motion: reduce) { .social-pulse { animation: none; } .social-wiggle:hover svg, .group:hover .social-wiggle svg { animation: none; } }
+
+/* Printing (receipts): one clean A4 page; site chrome carries print:hidden */
+@page { size: A4; margin: 10mm; }
+@media print {
+  body { background: #fff !important; }
+  .receipt-sheet, .receipt-sheet * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .receipt-sheet { break-inside: avoid; page-break-inside: avoid; }
 }

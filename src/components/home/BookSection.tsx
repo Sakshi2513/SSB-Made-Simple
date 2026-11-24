@@ -3,6 +3,7 @@ import { ArrowRight, CalendarCheck, ClipboardCheck, FileCheck, Target, ShoppingB
 import Reveal from "@/components/Reveal";
 import TestimonialSlider from "./TestimonialSlider";
 import { bookConfig } from "@/config/site";
+import { getSettings } from "@/lib/content";
 
 const features = [
   { Icon: CalendarCheck, t: "30-day plan", c: "#3b9cff" },
@@ -11,7 +12,10 @@ const features = [
   { Icon: Target, t: "Exam focused", c: "#ff8f1f" },
 ];
 
-export default function BookSection() {
+export default async function BookSection() {
+  const cfg = await getSettings();
+  const price = cfg.bookPrice || bookConfig.price;
+  const buyUrl = cfg.bookUrl || bookConfig.amazonUrl;
   return (
     <section id="book" className="relative overflow-hidden bg-[#0d2a22] text-white">
       <div
@@ -64,9 +68,9 @@ export default function BookSection() {
             <div className="relative mt-6 flex flex-wrap items-center gap-4 rounded-2xl border border-white/15 bg-black/20 p-4">
               <div>
                 <p className="text-xs font-bold uppercase tracking-wider text-white/60">Price</p>
-                <p className="text-3xl font-black leading-none text-gold">{bookConfig.price}</p>
+                <p className="text-3xl font-black leading-none text-gold">{price}</p>
               </div>
-              <a href={bookConfig.amazonUrl} target="_blank" rel="noopener noreferrer" className="btn-gold btn-shine ml-auto !px-6 !py-3">
+              <a href={buyUrl} target="_blank" rel="noopener noreferrer" className="btn-gold btn-shine ml-auto !px-6 !py-3">
                 <ShoppingBag size={18} /> Buy now <ArrowRight size={16} />
               </a>
             </div>

@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Clock } from "lucide-react";
 import Reveal from "@/components/Reveal";
-import { posts } from "@/content/posts";
+import { getPosts } from "@/lib/content";
 
 const tones = ["#3b9cff", "#ffd21f", "#4a7a2e", "#ff8f1f"];
 
-export default function BlogSection() {
+export default async function BlogSection() {
+  const posts = await getPosts();
   const [lead, ...rest] = posts;
   return (
     <section id="blog" className="relative overflow-hidden bg-[#f3f6fc]">

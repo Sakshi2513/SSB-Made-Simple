@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Download } from "lucide-react";
 import PageHero from "@/components/PageHero";
-import { downloads } from "@/content/downloads";
+import { getDownloads } from "@/lib/content";
 
 export const metadata: Metadata = { title: "Downloads", description: "Free SSB preparation PDFs and resources." };
 
-export default function DownloadsPage() {
+export default async function DownloadsPage() {
+  const downloads = await getDownloads();
   return (
     <>
       <PageHero image="page-downloads|oir" title="Downloads" subtitle="Free PDFs and resources to study offline." />

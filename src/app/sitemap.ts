@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
 import { ssbStages } from "@/content/ssbStages";
-import { posts } from "@/content/posts";
-import { materials } from "@/content/materials";
+import { getMaterials, getPosts } from "@/lib/content";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const posts = await getPosts();
+  const materials = await getMaterials();
   const base = siteConfig.url;
   const fixed = ["", "/ssb-tasks", "/study-material", "/practice-tests", "/book", "/blog", "/downloads", "/about", "/contact", "/privacy-policy", "/terms", "/refund-policy"];
   return [

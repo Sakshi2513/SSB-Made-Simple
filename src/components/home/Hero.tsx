@@ -25,14 +25,14 @@ export default function Hero() {
         <>
           {/* desktop: indigo wash only behind the text column, warm sunrise glow on the right */}
           <div
-            className="absolute inset-0 -z-10 hidden md:block"
+            className="absolute inset-0 -z-10 hidden lg:block"
             style={{
               background:
                 "linear-gradient(90deg, rgba(7,11,36,.96) 0%, rgba(8,13,44,.72) 30%, rgba(10,16,52,.12) 50%, rgba(10,16,52,0) 62%), linear-gradient(180deg, rgba(7,11,36,.5) 0%, transparent 22%, transparent 70%, #070b24 100%), radial-gradient(40% 45% at 78% 50%, rgba(255,128,48,.18), transparent 70%)",
             }}
             aria-hidden="true"
           />
-          <div className="rays absolute -inset-x-1/4 inset-y-0 -z-10 hidden md:block" aria-hidden="true" />
+          <div className="rays absolute -inset-x-1/4 inset-y-0 -z-10 hidden lg:block" aria-hidden="true" />
           <div
             className="absolute inset-0 -z-10"
             style={{ background: "radial-gradient(120% 90% at 62% 50%, transparent 55%, rgba(3,5,20,.6) 100%)" }}
@@ -50,7 +50,7 @@ export default function Hero() {
             aria-hidden="true"
           />
           <div className="bg-grid absolute inset-0 -z-10 opacity-50 [mask-image:linear-gradient(180deg,#000,transparent_75%)]" aria-hidden="true" />
-          <div className="absolute inset-x-0 bottom-0 h-[270px] md:h-[540px]">
+          <div className="absolute inset-x-0 bottom-0 h-[270px] lg:h-[540px]">
             <HeroScene />
           </div>
         </>
@@ -58,9 +58,9 @@ export default function Hero() {
 
       <Particles />
 
-      <div className="container-x relative pb-8 pt-8 md:flex md:min-h-[calc(100svh-70px)] md:items-center md:py-4">
+      <div className="container-x relative pb-8 pt-8 lg:flex lg:min-h-[calc(100svh-70px)] lg:items-center lg:py-4">
         {/* Text column: never wider than the left half, so no text touches the officers' faces */}
-        <div className="max-w-3xl md:max-w-[calc(50vw_-_max(0px,(100vw_-_1560px)/2)_-_3rem)]">
+        <div className="max-w-3xl lg:max-w-[calc(50vw_-_max(0px,(100vw_-_1560px)/2)_-_3rem)]">
           {/* Badge: gradient-bordered glass pill */}
           <p className="intro inline-block rounded-full bg-gradient-to-r from-gold/70 via-white/25 to-transparent p-px" style={delay(100)}>
             <span className="stencil hero-eyebrow inline-flex items-center gap-2 rounded-full bg-[#0b1240]/85 px-4 py-2 text-gold backdrop-blur">
@@ -72,38 +72,38 @@ export default function Hero() {
             </span>
           </p>
 
-          <h1 className="mt-4 font-black uppercase leading-[0.9] tracking-tighter [text-shadow:0_8px_40px_rgba(0,0,0,0.55)] [@media(min-height:800px)]:md:mt-5">
-            <span className="intro block text-white text-[clamp(4.2rem,22vw,6.5rem)] md:text-[min(10vw,15vh,8.6rem)]" style={delay(250)}>
+          <h1 className="mt-4 font-black uppercase leading-[0.9] tracking-tighter [text-shadow:0_8px_40px_rgba(0,0,0,0.55)] [@media(min-height:800px)]:lg:mt-5">
+            <span className="intro block text-white text-[clamp(4.2rem,22vw,6.5rem)] lg:text-[min(10vw,15vh,8.6rem)]" style={delay(250)}>
               SSB
             </span>
-            <span className="intro text-shimmer block whitespace-nowrap text-[clamp(2.1rem,9.4vw,3.4rem)] md:text-[min(5.2vw,7.6vh,5.2rem)]" style={delay(380)}>
+            <span className="intro text-shimmer block whitespace-nowrap text-[clamp(2.1rem,9.4vw,3.4rem)] lg:text-[min(5.2vw,7.6vh,5.2rem)]" style={delay(380)}>
               Made Simple
             </span>
           </h1>
 
-          <p className="intro mt-4 [@media(min-height:800px)]:md:mt-5" style={delay(520)}>
+          <p className="intro mt-4 [@media(min-height:800px)]:lg:mt-5" style={delay(520)}>
             <span className="hero-label inline-flex items-center gap-2.5 rounded-xl border border-white/20 bg-white/[0.08] px-4 py-2 font-black uppercase tracking-[0.16em] text-white backdrop-blur">
               <CalendarDays size={20} className="text-gold" /> A 30-day action plan
             </span>
           </p>
 
           {/* Message: lead (what it is), body (how), closing (why) */}
-          <div className="mt-4 max-w-[46rem] md:max-w-[min(46rem,calc(41vw_-_max(0px,(100vw_-_1560px)/2)_-_3rem))] border-l-2 border-gold/50 pl-5 [@media(min-height:800px)]:md:mt-5">
+          <div className="mt-4 max-w-[46rem] lg:max-w-[min(46rem,calc(41vw_-_max(0px,(100vw_-_1560px)/2)_-_3rem))] border-l-2 border-gold/50 pl-5 [@media(min-height:800px)]:lg:mt-5">
             <p className="intro hero-lead" style={delay(640)}>
               SSB isn&apos;t about what you know. It&apos;s about the fire within you, the mindset you carry and the officer you
               are destined to become.
             </p>
-            <p className="intro hero-body mt-2 [@media(min-height:800px)]:md:mt-3" style={delay(700)}>
+            <p className="intro hero-body mt-2 [@media(min-height:800px)]:lg:mt-3" style={delay(700)}>
               No shortcuts. No guesswork. Just a powerful day-by-day preparation roadmap, backed by mentors who have guided{" "}
               <strong className="text-white">1,200+ recommended candidates</strong>. Challenge your limits, conquer your
               weaknesses, own your personality and walk into that SSB hall ready to give it everything you&apos;ve got.
             </p>
-            <p className="intro hero-close mt-2 [@media(min-height:800px)]:md:mt-3" style={delay(760)}>
+            <p className="intro hero-close mt-2 [@media(min-height:800px)]:lg:mt-3" style={delay(760)}>
               Because the uniform isn&apos;t just a dream. It&apos;s a mission.
             </p>
           </div>
 
-          <div className="intro mt-5 flex flex-wrap gap-3 [@media(min-height:800px)]:md:mt-6 [@media(min-height:800px)]:md:gap-4" style={delay(860)}>
+          <div className="intro mt-5 flex flex-wrap gap-3 [@media(min-height:800px)]:lg:mt-6 [@media(min-height:800px)]:lg:gap-4" style={delay(860)}>
             <Link
               href="/ssb-tasks"
               className="group btn-gold btn-shine hero-btn !rounded-xl !px-8 !py-4 shadow-[0_18px_40px_-14px_rgba(255,210,31,0.9)]"
@@ -116,7 +116,7 @@ export default function Hero() {
           </div>
 
           {/* Proof: four glass tiles */}
-          <dl className="intro mt-5 grid max-w-[46rem] grid-cols-2 gap-3 sm:grid-cols-4 [@media(min-height:800px)]:md:mt-6" style={delay(940)}>
+          <dl className="intro mt-5 grid max-w-[46rem] grid-cols-2 gap-3 sm:grid-cols-4 [@media(min-height:800px)]:lg:mt-6" style={delay(940)}>
             {proof.map(({ Icon, to, suffix, label }) => (
               <div
                 key={label}
@@ -134,14 +134,14 @@ export default function Hero() {
       </div>
 
       {hero && (
-        <div className="relative -z-20 aspect-[4/3] w-full overflow-hidden [mask-image:linear-gradient(180deg,transparent,#000_24%,#000_82%,transparent)] md:absolute md:inset-x-0 md:bottom-0 md:aspect-[1877/838] md:[mask-image:linear-gradient(180deg,transparent,#000_26%)]">
+        <div className="relative -z-20 aspect-[16/10] w-full overflow-hidden [mask-image:linear-gradient(180deg,transparent,#000_24%,#000_82%,transparent)] lg:absolute lg:inset-x-0 lg:bottom-0 lg:aspect-[1877/838] lg:[mask-image:linear-gradient(180deg,transparent,#000_26%)]">
           <Image
             src={hero}
             alt=""
             fill
             priority
             sizes="100vw"
-            className="animate-kenburns object-cover object-[90%_center] md:object-center"
+            className="animate-kenburns object-cover object-[100%_center] lg:object-center"
           />
         </div>
       )}

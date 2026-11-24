@@ -60,7 +60,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false);
       if (u && db) {
         getDoc(doc(db, "users", u.uid))
-          .then((s) => setRole(s.data()?.role ?? "user"))
+          .then(async (s) => {
+            if (!s.exists()) await ensureUserDoc(u); // recreate a missing profile document
+            setRole(s.data()?.role ?? "user");
+          })
           .catch(() => setRole("user"));
       } else {
         setRole("user");

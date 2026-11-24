@@ -1,10 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, CalendarCheck, ClipboardCheck, Download, Users } from "lucide-react";
+import { CalendarCheck, ClipboardCheck, Download, Users } from "lucide-react";
 import Reveal from "@/components/Reveal";
-import { siteConfig } from "@/config/site";
-
-const enrollHref = `https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent("Hi, I want to start my SSB journey.")}`;
+import BuyButton from "@/components/BuyButton";
 
 const steps = [
   { Icon: CalendarCheck, t: "30-day plan", c: "#3b9cff" },
@@ -42,9 +40,7 @@ export default function FinalCta() {
             ))}
           </ul>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href={enrollHref} target="_blank" rel="noopener noreferrer" className="btn-gold btn-shine !px-8 !py-4">
-              Start your SSB journey <ArrowRight size={18} />
-            </a>
+            <BuyButton productId="plan-30day" label="Start your SSB journey" className="btn-gold btn-shine !px-8 !py-4" />
             <Link href="/downloads" className="btn-ghost !px-8 !py-4"><Download size={18} /> Explore free material</Link>
           </div>
         </Reveal>

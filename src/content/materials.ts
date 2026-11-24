@@ -5,6 +5,8 @@ export type Material = {
   category: string;
   summary: string;
   body: string[];
+  tags?: string[];
+  updatedAt?: string;
 };
 
 export const materials: Material[] = [

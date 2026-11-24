@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Check, Download, Sparkles } from "lucide-react";
+import { Check, Download, Sparkles } from "lucide-react";
 import PageHero from "@/components/PageHero";
-import { siteConfig, program } from "@/config/site";
+import BuyButton from "@/components/BuyButton";
+import { getProducts } from "@/lib/content";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "Subscription & Premium Packs",
@@ -11,17 +13,16 @@ export const metadata: Metadata = {
 
 const wa = (text: string) => `https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent(text)}`;
 
-const packs = [
-  { name: "OIR Practice Pack", price: "₹299", c: "#3b9cff", fg: "#fff", items: ["1,000 OIR questions", "Timed practice sets", "Answer explanations"] },
-  { name: "TAT + WAT + SRT Mega Pack", price: "₹499", c: "#ffd21f", fg: "#0c2556", items: ["60 TAT images", "Word and situation banks", "Answer frameworks"] },
-  { name: "GTO Preparation Pack", price: "₹699", c: "#4a7a2e", fg: "#fff", items: ["GTO drills", "Task-by-task strategies", "Lecturette topic bank"] },
-  { name: "Interview Master Pack", price: "₹599", c: "#ff8f1f", fg: "#fff", items: ["Interview framework", "220+ interview questions", "30-story personal bank"] },
-];
+
 
 const free = ["Free PDF library", "Blog and study guides", "Practice tests with a free login"];
-const planItems = ["All 8 SSB tasks, decoded", "40+ hands-on drills", "220+ interview questions", "Day-0 document checklist", "Week-by-week 30-day roadmap"];
 
-export default function SubscriptionPage() {
+const access = (d: number) => (d > 0 ? `${d} days access` : "Lifetime access");
+
+export default async function SubscriptionPage() {
+  const products = await getProducts();
+  const plan = products.find((p) => p.type === "plan");
+  const packs = products.filter((p) => p.type === "pack");
   return (
     <>
       <PageHero
@@ -59,18 +60,17 @@ export default function SubscriptionPage() {
                 <span className="relative inline-flex w-fit items-center gap-2 rounded-full bg-gold px-3 py-1 text-xs font-black uppercase tracking-wider text-[#0c2556]">
                   <Sparkles size={13} /> Full program
                 </span>
-                <h2 className="relative mt-4 text-3xl font-black uppercase tracking-tight">{program.name}</h2>
-                <p className="relative mt-2 text-6xl font-black text-gold-gradient">{program.price}</p>
+                <h2 className="relative mt-4 text-3xl font-black uppercase tracking-tight">{plan?.name}</h2>
+                <p className="relative mt-2 text-6xl font-black text-gold-gradient">₹{plan?.price}<span className="ml-3 text-base font-bold text-white/70">{plan ? access(plan.durationDays) : ""}</span></p>
                 <ul className="relative mt-6 grid flex-1 gap-3 sm:grid-cols-2">
-                  {planItems.map((x) => (
+                  {(plan?.features ?? []).map((x) => (
                     <li key={x} className="flex items-start gap-3 rounded-xl border border-white/15 bg-white/[0.07] p-3 text-[0.95rem] font-semibold backdrop-blur">
                       <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-gold text-[#0c2556]"><Check size={14} strokeWidth={3.4} /></span> {x}
                     </li>
                   ))}
                 </ul>
-                <a href={wa("Hi, I want to enroll in the 30-Day SSB Action Plan.")} target="_blank" rel="noopener noreferrer" className="btn-gold btn-shine relative mt-7 w-full !py-4">
-                  Enroll Now <ArrowRight size={18} />
-                </a>
+                {plan && <BuyButton productId={plan.id} label="Enroll now" price={plan.price} className="btn-gold btn-shine relative mt-7 w-full !py-4" />}
+                <a href={wa("Hi, I have a question about the 30-Day SSB Action Plan.")} target="_blank" rel="noopener noreferrer" className="relative mt-3 block text-center text-sm font-bold text-white/70 hover:text-gold">Have a question? Ask on WhatsApp</a>
               </div>
             </div>
           </div>
@@ -82,29 +82,28 @@ export default function SubscriptionPage() {
             <p className="mt-2 text-[#4d5b76]">Pay per pack. Instant access after payment.</p>
             <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {packs.map((p) => (
-                <li key={p.name} className="group flex flex-col overflow-hidden rounded-3xl border border-[#dfe6f2] bg-white shadow-[0_18px_40px_-28px_rgba(12,37,86,0.5)] transition duration-300 hover:-translate-y-2 hover:shadow-[0_30px_50px_-28px_rgba(12,37,86,0.6)]">
-                  <div className="relative p-6 pb-5" style={{ background: p.c, color: p.fg }}>
+                <li key={p.id} className="group flex flex-col overflow-hidden rounded-3xl border border-[#dfe6f2] bg-white shadow-[0_18px_40px_-28px_rgba(12,37,86,0.5)] transition duration-300 hover:-translate-y-2 hover:shadow-[0_30px_50px_-28px_rgba(12,37,86,0.6)]">
+                  <div className="relative p-6 pb-5" style={{ background: p.accent, color: p.accent === "#ffd21f" ? "#0c2556" : "#fff" }}>
                     <span className="absolute -right-3 -top-6 select-none text-8xl font-black opacity-15" aria-hidden="true">₹</span>
                     <p className="relative text-xs font-extrabold uppercase tracking-wider opacity-80">Pack</p>
                     <h3 className="relative mt-1 min-h-[3.2rem] text-lg font-extrabold leading-tight">{p.name}</h3>
-                    <p className="relative mt-3 text-4xl font-black">{p.price}</p>
+                    <p className="relative mt-3 text-4xl font-black">₹{p.price}</p>
+                    <p className="relative text-xs font-bold uppercase tracking-wider opacity-80">{access(p.durationDays)}</p>
                   </div>
                   <div className="flex flex-1 flex-col p-6">
                     <ul className="flex-1 space-y-2.5">
-                      {p.items.map((x) => (
+                      {p.features.map((x) => (
                         <li key={x} className="flex items-start gap-2 text-sm font-medium text-[#33415c]">
                           <Check size={16} className="mt-0.5 shrink-0 text-[#4a7a2e]" strokeWidth={3} /> {x}
                         </li>
                       ))}
                     </ul>
-                    <a href={wa(`Hi, I want to buy the ${p.name}.`)} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-[#0c2556] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#143a82]">
-                      Buy pack <ArrowRight size={16} className="transition group-hover:translate-x-1" />
-                    </a>
+                    <BuyButton productId={p.id} label="Buy pack" price={p.price} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0c2556] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#143a82]" />
                   </div>
                 </li>
               ))}
             </ul>
-            <p className="mt-6 text-xs text-[#6b7589]">Online card and UPI payment is coming soon. For now, enrolment is confirmed over WhatsApp.</p>
+            <p className="mt-6 text-xs text-[#6b7589]">Pay securely with UPI, cards or netbanking through Razorpay. Access unlocks instantly in My Library. Need help? Message us on WhatsApp.</p>
           </div>
         </div>
       </section>

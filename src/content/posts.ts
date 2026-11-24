@@ -8,6 +8,8 @@ export type Post = {
   readMins: number;
   author: string;
   body: string[]; // "## " = heading, "- " = bullet
+  tags?: string[];
+  updatedAt?: string; // YYYY-MM-DD, shown as "Last updated"
 };
 
 const author = "Hitender Rohilla";

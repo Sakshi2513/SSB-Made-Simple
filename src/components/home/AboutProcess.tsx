@@ -43,7 +43,7 @@ function Tile({ Icon, sub, label, c, fg, dark }: TileProps) {
 export default function AboutProcess() {
   return (
     <section id="about" className="bg-dots relative bg-white">
-      <div className="container-x grid items-stretch gap-6 py-12 md:grid-cols-2 md:py-14">
+      <div className="container-x grid items-stretch gap-6 py-12 lg:grid-cols-2 md:py-14">
         {/* Box 1: What is SSB */}
         <Reveal className="h-full">
           <div className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#dfe2e8] bg-gradient-to-br from-[#f6f7f9] to-[#e9ecf1] p-6 shadow-[0_20px_44px_-28px_rgba(30,35,50,0.5)] md:p-8">

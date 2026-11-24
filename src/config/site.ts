@@ -7,11 +7,13 @@ export const siteConfig = {
   author: "Hitender Rohilla",
   contact: {
     email: "support@ssbmadesimple.in",
-    phone: "+91 98111 22334",
-    whatsapp: "919811122334",
-    telegram: "https://t.me/ssb_made_simple",
+    phone: "+91 89004 48642",
+    whatsapp: "918900448642",
+    telegram: "https://t.me/ssbmadesimple",
+    telegramName: "SSB Made Simple",
     youtube: "https://youtube.com/@ssbmadesimple",
-    instagram: "https://instagram.com/ssb.made.simple",
+    instagram: "https://www.instagram.com/ssbmadesimple",
+    instagramHandle: "@ssbmadesimple",
   },
 };
 
@@ -22,6 +24,7 @@ export const navLinks = [
   { href: "/practice-tests", label: "Practice Tests" },
   { href: "/book", label: "Book" },
   { href: "/blog", label: "Blog" },
+  { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
 

@@ -1,20 +1,13 @@
-import { ArrowRight, Brain, Check, FileCheck, Flag, ListChecks, MessagesSquare, Sparkles } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import BuyButton from "@/components/BuyButton";
 import PlanExplorer from "./PlanExplorer";
-import { siteConfig, program } from "@/config/site";
-import { programContents } from "@/content/home";
-
-const enrollHref = `https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent("Hi, I want to enroll in the 30-Day SSB Action Plan.")}`;
+import PlanFeatures from "./PlanFeatures";
+import Counter from "@/components/Counter";
+import { program } from "@/config/site";
 
 const included = ["All 8 SSB tasks, decoded", "40+ hands-on drills", "220+ interview questions", "Day-0 document checklist"];
 
-const features = [
-  { Icon: Brain, title: "TAT framework" },
-  { Icon: ListChecks, title: "SRT structure" },
-  { Icon: Flag, title: "Command drills" },
-  { Icon: MessagesSquare, title: "Story bank" },
-  { Icon: FileCheck, title: "Day-0 checklist" },
-];
 
 export default function Roadmap() {
   return (
@@ -71,7 +64,7 @@ export default function Roadmap() {
                 </div>
 
                 <p className="relative mt-4 text-5xl font-black leading-none tracking-tight text-gold-gradient" aria-label={`Price ${program.price}`}>
-                  {program.price}
+                  ₹<Counter to={999} duration={1400} />
                 </p>
                 
                 <ul className="relative my-4 flex flex-1 flex-col justify-center gap-3">
@@ -85,10 +78,8 @@ export default function Roadmap() {
                   ))}
                 </ul>
 
-                <a href={enrollHref} target="_blank" rel="noopener noreferrer" className="btn-gold btn-shine relative mt-5 w-full !py-3 !text-sm">
-                  Enroll now <ArrowRight size={20} />
-                </a>
-                <p className="relative mt-2 text-center text-[0.7rem] text-white/50">Opens WhatsApp to confirm your enrollment.</p>
+                <BuyButton productId="plan-30day" label="Enroll now" className="btn-gold btn-shine relative mt-5 w-full !py-3 !text-sm" />
+                <p className="relative mt-2 text-center text-[0.7rem] text-white/50">Secure payment by Razorpay: UPI, cards and netbanking.</p>
               </div>
             </div>
           </Reveal>
@@ -96,19 +87,7 @@ export default function Roadmap() {
           <Reveal delay={200} className="h-full">
             <div className="flex h-full flex-col rounded-3xl border border-[#dfe2e8] bg-[#f1f3f6] p-4 shadow-[0_20px_44px_-28px_rgba(30,35,50,0.5)]">
               <p className="text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[#0c2556]">Everything Inside The Plan</p>
-              <ul className="mt-3 flex flex-1 flex-col divide-y divide-[#dfe2e8]">
-                {features.map(({ Icon, title }, i) => (
-                  <li key={title} className="flex flex-1 items-center gap-3 py-2 first:pt-0 last:pb-0">
-                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-[#ffe985] to-[#ffc800] text-[#0c2556]">
-                      <Icon size={18} strokeWidth={2.3} />
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-[0.8rem] font-extrabold uppercase tracking-tight text-[#0c2556]">{title}</p>
-                      <p className="mt-0.5 text-[0.72rem] leading-snug text-[#4d5b76]">{programContents[i]}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <PlanFeatures />
             </div>
           </Reveal>
         </div>

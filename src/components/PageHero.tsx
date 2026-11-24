@@ -10,7 +10,7 @@ export default function PageHero({ title, subtitle, eyebrow }: { title: string; 
       <div className="absolute -bottom-24 right-0 h-96 w-96 rounded-full bg-gold/15 blur-3xl" aria-hidden="true" />
       <div className="container-x relative py-12 md:py-16">
         <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-white/60">
-          <Link href="/" className="hover:text-gold">Home</Link> / <span className="text-white">{eyebrow ?? title}</span>
+          <Link href="/" className="inline-block py-1.5 hover:text-gold">Home</Link> / <span className="text-white">{eyebrow ?? title}</span>
         </nav>
         <h1 className="mt-5 max-w-4xl text-4xl font-black leading-[1.05] tracking-tight md:text-6xl">
           {title}

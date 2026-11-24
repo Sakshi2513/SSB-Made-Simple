@@ -23,7 +23,7 @@ export default function LoginPage() {
       <div className="container-x relative grid min-h-[calc(100vh-4.5rem)] items-center gap-10 py-12 lg:grid-cols-[1.1fr_30rem] lg:gap-20">
         <div className="max-w-xl">
           <nav aria-label="Breadcrumb" className="text-sm text-white/60">
-            <Link href="/" className="hover:text-gold">Home</Link> / <span className="text-white">Login</span>
+            <Link href="/" className="inline-block py-1.5 hover:text-gold">Home</Link> / <span className="text-white">Login</span>
           </nav>
           <h1 className="mt-5 text-4xl font-black uppercase leading-[1.02] tracking-tight md:text-6xl">
             Your SSB journey,
@@ -31,7 +31,7 @@ export default function LoginPage() {
             <span className="text-gold-gradient">One login away.</span>
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-white/75">Log in or create a free account to take practice tests and keep your preparation in one place.</p>
-          <ul className="mt-8 grid max-w-lg gap-3 sm:grid-cols-2">
+          <ul className="mt-8 hidden max-w-lg gap-3 sm:grid sm:grid-cols-2">
             {perks.map(({ Icon, t, d, c }) => (
               <li key={t} className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/[0.07] p-3.5 backdrop-blur">
                 <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl" style={{ background: c, color: c === "#ffd21f" ? "#0c2556" : "#fff" }}>
@@ -44,7 +44,7 @@ export default function LoginPage() {
               </li>
             ))}
           </ul>
-          <p className="mt-8 flex items-center gap-2 text-sm text-white/60"><ShieldCheck size={16} className="text-gold" /> Your data is protected and never shared.</p>
+          <p className="mt-6 hidden items-center gap-2 text-sm text-white/60 sm:flex"><ShieldCheck size={16} className="text-gold" /> Your data is protected and never shared.</p>
         </div>
         <AuthForm />
       </div>

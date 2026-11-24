@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import Countdown from "./Countdown";
-import { oirQuestions, OIR_SECONDS } from "@/content/tests";
+import { OIR_SECONDS, type OIRQuestion } from "@/content/tests";
 
-export default function OIRTest({ onFinish }: { onFinish: (answers: number[]) => void }) {
+export default function OIRTest({ questions: oirQuestions, onFinish }: { questions: OIRQuestion[]; onFinish: (answers: number[]) => void }) {
   const [answers, setAnswers] = useState<number[]>(() => oirQuestions.map(() => -1));
 
   function pick(q: number, o: number) {

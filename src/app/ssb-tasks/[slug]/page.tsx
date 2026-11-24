@@ -48,7 +48,7 @@ export default async function StagePage({ params }: { params: Promise<{ slug: st
         </span>
         <div className="container-x relative py-14 md:py-24">
           <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-sm text-white/70">
-            <Link href="/" className="hover:text-gold">Home</Link> / <Link href="/ssb-tasks" className="hover:text-gold">SSB Tasks</Link> /{" "}
+            <Link href="/" className="inline-block py-1.5 hover:text-gold">Home</Link> / <Link href="/ssb-tasks" className="inline-block py-1.5 hover:text-gold">SSB Tasks</Link> /{" "}
             <span className="text-white">{stage.short}</span>
           </nav>
           <span className="mt-6 inline-block rounded-full px-4 py-1.5 text-xs font-extrabold uppercase tracking-wider shadow-lg" style={{ background: m.c, color: m.fg }}>

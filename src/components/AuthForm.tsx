@@ -162,7 +162,7 @@ export default function AuthForm() {
               type="button"
               onClick={() => setShow((v) => !v)}
               aria-label={show ? "Hide password" : "Show password"}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6b7589] hover:text-[#0c2556]"
+              className="absolute right-1 top-1/2 -translate-y-1/2 p-2.5 text-[#6b7589] hover:text-[#0c2556]"
             >
               {show ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
@@ -176,7 +176,7 @@ export default function AuthForm() {
           {busy ? "Please wait..." : mode === "login" ? "Login" : "Create account"}
         </button>
         {mode === "login" && (
-          <button type="button" onClick={forgot} className="w-full text-sm font-bold text-[#1c4cb0] hover:underline">
+          <button type="button" onClick={forgot} className="w-full py-2 text-sm font-bold text-[#1c4cb0] hover:underline">
             Forgot password?
           </button>
         )}

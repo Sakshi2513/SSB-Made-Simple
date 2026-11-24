@@ -33,8 +33,8 @@ export default function Why() {
               <p className="mt-1 text-xs font-bold uppercase tracking-wider text-white/70">Candidates mentored</p>
             </div>
             <div className="rounded-2xl border border-white/15 bg-white/[0.06] p-4 backdrop-blur">
-              <p className="text-4xl font-black text-gold"><Counter to={40} suffix="+" /></p>
-              <p className="mt-1 text-xs font-bold uppercase tracking-wider text-white/70">Years board experience</p>
+              <p className="text-4xl font-black text-gold"><Counter to={10} suffix="+" /></p>
+              <p className="mt-1 text-xs font-bold uppercase tracking-wider text-white/70">Years SSB experience</p>
             </div>
           </div>
         </Reveal>

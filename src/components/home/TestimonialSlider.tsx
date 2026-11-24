@@ -64,7 +64,9 @@ export default function TestimonialSlider() {
 
       <div className="relative mt-5 flex items-center gap-2" role="tablist" aria-label="Choose review">
         {testimonials.map((t, k) => (
-          <button key={t.name} onClick={() => setI(k)} role="tab" aria-selected={k === i} aria-label={`Review ${k + 1}`} className={`h-2 rounded-full transition-all duration-300 ${k === i ? "w-8 bg-gold" : "w-2 bg-white/30 hover:bg-white/60"}`} />
+          <button key={t.name} onClick={() => setI(k)} role="tab" aria-selected={k === i} aria-label={`Review ${k + 1}`} className="grid h-6 place-items-center px-0.5">
+            <span className={`block h-2 rounded-full transition-all duration-300 ${k === i ? "w-8 bg-gold" : "w-2 bg-white/30"}`} />
+          </button>
         ))}
       </div>
     </div>

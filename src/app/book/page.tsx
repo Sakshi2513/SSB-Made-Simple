@@ -3,13 +3,17 @@ import Image from "next/image";
 import { CheckCircle2, ExternalLink } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import { bookConfig } from "@/config/site";
+import { getSettings } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Our Book",
   description: "Our SSB preparation book, available on Flipkart.",
 };
 
-export default function BookPage() {
+export default async function BookPage() {
+  const cfg = await getSettings();
+  const price = cfg.bookPrice || bookConfig.price;
+  const buyUrl = cfg.bookUrl || bookConfig.amazonUrl;
   return (
     <>
       <PageHero image="page-book|sdt" title="Our Book" subtitle="Written from real SSB experience, available on Flipkart." />
@@ -32,8 +36,8 @@ export default function BookPage() {
               </li>
             ))}
           </ul>
-          <p className="mt-5 text-4xl font-black text-[#0c2556]">{bookConfig.price}</p>
-          <a href={bookConfig.amazonUrl} target="_blank" rel="noopener noreferrer" className="btn-gold btn-shine mt-4">
+          <p className="mt-5 text-4xl font-black text-[#0c2556]">{price}</p>
+          <a href={buyUrl} target="_blank" rel="noopener noreferrer" className="btn-gold btn-shine mt-4">
             Buy on Flipkart <ExternalLink size={16} />
           </a>
         </div>

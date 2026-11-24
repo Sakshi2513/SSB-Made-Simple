@@ -82,7 +82,7 @@ export default function SSBProcessPage() {
         <div className="bg-grid absolute inset-0 opacity-40" aria-hidden="true" />
         <div className="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-[#3b9cff]/25 blur-3xl" aria-hidden="true" />
         <div className="absolute -bottom-24 right-0 h-96 w-96 rounded-full bg-gold/15 blur-3xl" aria-hidden="true" />
-        <div className="container-x relative grid items-center gap-10 py-12 md:py-14 lg:grid-cols-[1fr_30rem] lg:gap-16">
+        <div className="container-x relative py-12 md:py-14">
           <div>
             <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-white/60">
               <Link href="/" className="hover:text-gold">Home</Link> / <span className="text-white">SSB Process</span>
@@ -107,23 +107,6 @@ export default function SSBProcessPage() {
               <Link href="/ssb-tasks" className="btn-gold btn-shine !px-7 !py-3.5">Explore The Eight Tasks</Link>
               <Link href="/practice-tests" className="btn-ghost !px-7 !py-3.5">Practice Tests</Link>
             </div>
-          </div>
-
-          <div className="rounded-3xl border border-white/20 bg-[#07122e]/75 p-5 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.8)] backdrop-blur-xl md:p-6">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold">Jump To A Day</p>
-            <ol className="mt-4 space-y-2.5">
-              {days.map((d) => (
-                <li key={d.id}>
-                  <a href={`#${d.id}`} className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.05] p-3 transition hover:border-gold/60 hover:bg-white/[0.1]">
-                    <span className="w-[5rem] shrink-0 whitespace-nowrap rounded-lg px-2 py-2 text-center text-xs font-extrabold uppercase tracking-wider" style={{ background: d.c, color: d.fg }}>
-                      {d.day}
-                    </span>
-                    <span className="min-w-0 flex-1 text-sm font-extrabold">{d.name}</span>
-                    <ArrowRight size={16} className="shrink-0 text-white/50" />
-                  </a>
-                </li>
-              ))}
-            </ol>
           </div>
         </div>
         <div className="tristripe" />
