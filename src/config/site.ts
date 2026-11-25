@@ -6,7 +6,7 @@ export const siteConfig = {
   url: "https://www.ssbmadesimple.com",
   author: "Hitender Rohilla",
   contact: {
-    email: "support@ssbmadesimple.in",
+    email: "support@ssbmadesimple.com",
     phone: "+91 89004 48642",
     whatsapp: "918900448642",
     telegram: "https://t.me/ssbmadesimple",
