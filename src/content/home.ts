@@ -65,13 +65,13 @@ export const weeks = [
 ];
 
 export const freeMaterial = [
-  { title: "PPDT Pictures", file: "https://ssbmadesimple.com/downloads/ppdt-picture-bank.pdf" },
-  { title: "TAT Word List", file: "https://ssbmadesimple.com/downloads/tat-word-list.pdf" },
-  { title: "WAT Sentences", file: "https://ssbmadesimple.com/downloads/wat-sentences.pdf" },
-  { title: "SRT Situations", file: "https://ssbmadesimple.com/downloads/srt-situations.pdf" },
-  { title: "Lecturette Topics", file: "https://ssbmadesimple.com/downloads/lecturette-topics.pdf" },
-  { title: "GTO Topics & Tips", file: "https://ssbmadesimple.com/downloads/gto-topics-tips.pdf" },
-  { title: "Interview Questions", file: "https://ssbmadesimple.com/downloads/interview-questions.pdf" },
+  { title: "PPDT Pictures", file: undefined as string | undefined },
+  { title: "TAT Word List", file: undefined as string | undefined },
+  { title: "WAT Sentences", file: undefined as string | undefined },
+  { title: "SRT Situations", file: undefined as string | undefined },
+  { title: "Lecturette Topics", file: undefined as string | undefined },
+  { title: "GTO Topics & Tips", file: undefined as string | undefined },
+  { title: "Interview Questions", file: undefined as string | undefined },
   { title: "OIR Practice Sets", file: undefined as string | undefined },
 ];
 
