@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Check, Copy, ExternalLink, Mail, MessageCircle, Phone } from "lucide-react";
+import { Check, ChevronDown, Copy, ExternalLink, Mail, MessageCircle, Phone } from "lucide-react";
 
-type Props = { kind: "email" | "phone"; value: string; whatsapp?: string };
+type Props = { kind: "email" | "phone"; value: string; whatsapp?: string; card?: { label: string; bg: string; fg: string } };
 
 // Click the email or phone and a small menu opens with real actions (Gmail, mail app, call, WhatsApp, copy).
-export default function ContactLink({ kind, value, whatsapp }: Props) {
+export default function ContactLink({ kind, value, whatsapp, card }: Props) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const box = useRef<HTMLDivElement>(null);
@@ -29,12 +29,23 @@ export default function ContactLink({ kind, value, whatsapp }: Props) {
   const digits = value.replace(/\D/g, "");
 
   return (
-    <div ref={box} className="relative mt-1.5">
-      <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="flex items-center gap-2 text-sm hover:text-[#1c4cb0] hover:underline">
-        <Icon size={14} className="text-[#1c4cb0]" /> {value}
-      </button>
+    <div ref={box} className={card ? "relative" : "relative mt-1.5"}>
+      {card ? (
+        <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="group flex w-full items-center gap-4 rounded-2xl border border-[#dfe6f2] bg-white p-4 text-left shadow-[0_14px_30px_-24px_rgba(12,37,86,0.6)] transition duration-300 hover:-translate-y-1 hover:border-gold hover:shadow-[0_20px_36px_-22px_rgba(12,37,86,0.7)]">
+          <span style={{ background: card.bg, color: card.fg, "--glow": "rgba(12,37,86,.35)" } as React.CSSProperties} className="social-pulse social-wiggle grid h-12 w-12 shrink-0 place-items-center rounded-2xl"><Icon size={22} /></span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-xs font-bold uppercase tracking-wider text-[#6b7589]">{card.label}</span>
+            <span className="block truncate font-extrabold text-[#0c2556]">{value}</span>
+          </span>
+          <ChevronDown size={18} className={`shrink-0 text-[#6b7589] transition ${open ? "rotate-180" : ""}`} />
+        </button>
+      ) : (
+        <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="flex items-center gap-2 text-sm hover:text-[#1c4cb0] hover:underline">
+          <Icon size={14} className="text-[#1c4cb0]" /> {value}
+        </button>
+      )}
       {open && (
-        <div role="menu" className="absolute bottom-full left-0 z-30 mb-2 w-60 rounded-2xl border border-[#dfe6f2] bg-white p-1.5 shadow-[0_18px_40px_-18px_rgba(12,37,86,0.45)]">
+        <div role="menu" className={`absolute left-0 z-30 w-60 ${card ? "top-full mt-2" : "bottom-full mb-2"} rounded-2xl border border-[#dfe6f2] bg-white p-1.5 shadow-[0_18px_40px_-18px_rgba(12,37,86,0.45)]`}>
           {kind === "email" ? (
             <>
               <a role="menuitem" className={item} target="_blank" rel="noopener noreferrer" href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(value)}`}><ExternalLink size={15} /> Write in Gmail</a>

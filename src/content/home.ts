@@ -86,7 +86,7 @@ export const testimonials = [
   },
   {
     name: "Rohit Verma", role: "AFCAT aspirant", place: "Lucknow, Uttar Pradesh",
-    text: "Bought the book for ₹299 and ended up buying the full program. The interview master pack alone saved me. I walked into the PI with 30 personal stories and zero memorised answers. Recommended for Air Force.",
+    text: "Bought the book for ₹379 and ended up buying the full program. The interview master pack alone saved me. I walked into the PI with 30 personal stories and zero memorised answers. Recommended for Air Force.",
   },
   {
     name: "Ananya Deshmukh", role: "NDA aspirant", place: "Pune, Maharashtra",

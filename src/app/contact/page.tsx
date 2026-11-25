@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ArrowUpRight, Mail, Phone } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import ContactForm from "@/components/ContactForm";
+import ContactLink from "@/components/ContactLink";
 import MentorCard from "@/components/MentorCard";
 import { socials } from "@/components/SocialIcons";
 import { siteConfig } from "@/config/site";
@@ -24,6 +25,10 @@ export default function ContactPage() {
             {[...socials.slice(0, 1), ...plain, ...socials.slice(1)].map((it) => {
               const Icon = it.Icon;
               const label = it.label;
+              if (label === "Email" || label === "Call us") {
+                const isMail = label === "Email";
+                return <ContactLink key={label} kind={isMail ? "email" : "phone"} value={isMail ? c.email : c.phone} whatsapp={c.whatsapp} card={{ label, bg: it.bg, fg: it.fg }} />;
+              }
               const value = "handle" in it ? it.handle : it.value;
               const bg = it.bg;
               const fg = it.fg;

@@ -42,7 +42,7 @@ export const bookConfig = {
     "320 pages of task breakdowns, real SSB examples and fillable templates you can carry into the centre. The physical companion to the 30-day program, for candidates who want one plan, one notebook and no screen fatigue.",
   author: "Hitender Rohilla",
   amazonUrl: "https://www.flipkart.com/ssb-made-simple-30-days-action-plan/p/itm4bbbc32940928",
-  price: "₹299",
+  price: "₹379",
   format: "Paperback",
   cover: "/brand/book-cover.webp",
   points: ["30-day plan", "Practice material", "Real SSB examples", "Exam focused", "Free digital copy with every order"],
