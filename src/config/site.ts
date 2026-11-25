@@ -3,7 +3,7 @@ export const siteConfig = {
   tagline: "A 30-day action plan for NDA, CDS and AFCAT. Structured guidance. Focused preparation. Real results.",
   description:
     "SSB Made Simple: a 30-day SSB action plan, task-wise study material, practice tests and a book by Hitender Rohilla for NDA, CDS and AFCAT candidates.",
-  url: "https://ssbmadesimple.com",
+  url: "https://www.ssbmadesimple.com",
   author: "Hitender Rohilla",
   contact: {
     email: "support@ssbmadesimple.in",
