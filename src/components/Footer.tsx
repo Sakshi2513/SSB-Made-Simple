@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, Phone } from "lucide-react";
+import ContactLink from "./ContactLink";
 import Logo from "./Logo";
 import { socials } from "./SocialIcons";
 import { siteConfig } from "@/config/site";
@@ -43,8 +43,8 @@ export default function Footer() {
           <Logo />
           <p className="mt-4 max-w-xs text-sm">{siteConfig.tagline}</p>
           <p className="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-[#1c4cb0]">Seva · Sam · Nabha</p>
-          <a href={`mailto:${c.email}`} className="mt-4 flex w-fit items-center gap-2 text-sm hover:text-[#1c4cb0] hover:underline"><Mail size={14} className="text-[#1c4cb0]" /> {c.email}</a>
-          <a href={`tel:${c.phone.replace(/\s/g, "")}`} className="mt-1 flex w-fit items-center gap-2 text-sm hover:text-[#1c4cb0] hover:underline"><Phone size={14} className="text-[#1c4cb0]" /> {c.phone}</a>
+          <div className="mt-4"><ContactLink kind="email" value={c.email} /></div>
+          <ContactLink kind="phone" value={c.phone} whatsapp={c.whatsapp} />
           <div className="mt-4 flex gap-2.5">
             {socials.map(({ key, label, href, Icon, bg, fg }) => (
               <a key={key} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} title={label} style={{ background: bg, color: fg }} className="social-wiggle grid h-10 w-10 place-items-center rounded-full shadow-md transition hover:-translate-y-1 hover:shadow-lg">
